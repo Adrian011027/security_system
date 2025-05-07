@@ -22,7 +22,6 @@ def centrar_ventana(ventana, width=600, height=400):
 
     screen_width = ventana.winfo_screenwidth()
     screen_height = ventana.winfo_screenheight()
-
     x = (screen_width - width) // 2
     y = (screen_height - height) // 2
 

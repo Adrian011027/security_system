@@ -107,7 +107,6 @@ while True:
                     os.makedirs(SAVE_PATH, exist_ok=True)
                     for _ in range(NUM_CAPTURES):
                         ret, frame = video.read()
-                        time.sleep(1)
                         if not ret:
                             print("No se pudo capturar un nuevo cuadro. Fin del video.")
                             break
@@ -118,37 +117,37 @@ while True:
                         print(f"Imagen guardada en: {capture_path}")
                         captures_taken += 1
                         time.sleep(1)
-                    #llamar el seed(newdir)
-                    """
+
+            
+                    flag_person = predecir(SAVE_PATH, ahora)
+                    
+                    print(flag_person)
                     try:
                             result = subprocess.run(
                                 ['node', './seed.js', newdir],
                                 capture_output=True,
                                 text=True,
-                                check=True
-                            )
-                            print("✅ Salida de seed.js:\n", result.stdout)
+                                check=True,
+                                encoding='utf-8'  # 🔥 Esto es lo que evita el UnicodeDecodeError
+                            )                            
+                            print("Salida de seed.js:\n", result.stdout)
                             if result.stderr:
-                                print("⚠️ Errores en seed.js:\n", result.stderr)
+                                print("Errores en seed.js:\n", result.stderr)
 
                     except subprocess.CalledProcessError as e:
-                        print("❌ Error al ejecutar seed.js:", e.stderr)
+                        print("Error al ejecutar seed.js:", e.stderr)
                     except Exception as e:
-                        print("❌ Error general:", str(e))
-                    flag_person = predecir(SAVE_PATH, ahora)
-                    
-                    print(flag_person)
-                    #flag_person = False #eliminar esta linea
+                        print("Error general:", str(e))
                     print(flag_person)
                     if flag_person:
                         hilo = threading.Thread(target=enviar_mensaje_sms, args=(ahora, newdir))
                         hilo.start()
-                        hilo_activado = True  # flag evita activación múltiple
+                        hilo_activado = True  # flag evita activación myultiple
                         print("\nSe envía el SMS.")
                     else:
                         print("No se detectó a ninguna persona.")
                     print("Capturas guardadas. Reiniciando detección.")
-                    motion_start_time = None  # reset el tiempo de detección"""
+                    motion_start_time = None  # reset el tiempo de detección
             else:
                 motion_start_time = None
         i += 1
